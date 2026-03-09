@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>字幕屋.com — YouTube動画の多言語字幕、これで十分。</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0f0f0f;
+    --white: #f4f0e8;
+    --accent: #e8381a;
+    --accent2: #1a8ce8;
+    --yellow: #f5c800;
+    --green: #2ecc71;
+    --gray: #181818;
+    --mid: #242424;
+    --border: rgba(255,255,255,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Noto Sans JP', sans-serif; overflow-x: hidden; }
+
+  /* TICKER */
+  .ticker { background: var(--accent); padding: 7px 0; overflow: hidden; white-space: nowrap; }
+  .ticker-inner { display: inline-block; animation: tick 20s linear infinite; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--white); }
+  @keyframes tick { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* NAV */
+  nav { padding: 18px 5vw; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+  .nav-logo { font-size: 22px; font-weight: 900; letter-spacing: -0.02em; }
+  .nav-logo span { color: var(--accent); }
+  .nav-cta { background: var(--accent); color: var(--white); padding: 10px 24px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+  .nav-cta:hover { background: var(--yellow); color: var(--black); }
+
+  /* HERO */
+  .hero { padding: 80px 5vw 100px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: 0; right: 0; width: 50%; height: 100%; background: radial-gradient(ellipse at 80% 30%, rgba(232,56,26,0.08) 0%, transparent 70%); pointer-events: none; }
+
+  .hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245,200,0,0.1);
+    border: 1px solid rgba(245,200,0,0.25);
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-bottom: 32px;
+    letter-spacing: 0.05em;
+  }
+  .hero-kicker::before { content: '●'; font-size: 8px; animation: blink 1.2s ease infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  .hero-title { font-size: clamp(42px, 7vw, 88px); font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 24px; }
+  .hero-title .em { color: var(--accent); }
+  .hero-title .small { font-size: 0.55em; font-weight: 300; color: rgba(244,240,232,0.5); display: block; margin-top: 8px; letter-spacing: 0em; }
+
+  .hero-desc { font-size: 16px; line-height: 1.9; color: rgba(244,240,232,0.65); font-weight: 300; max-width: 520px; margin-bottom: 48px; }
+  .hero-desc strong { color: var(--white); font-weight: 700; }
+
+  .hero-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+  .badge { display: flex; align-items: center; gap: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; border: 1px solid; }
+  .badge-speed { border-color: rgba(46,204,113,0.4); color: var(--green); background: rgba(46,204,113,0.06); }
+  .badge-price { border-color: rgba(245,200,0,0.4); color: var(--yellow); background: rgba(245,200,0,0.06); }
+  .badge-honest { border-color: rgba(244,240,232,0.2); color: rgba(244,240,232,0.5); background: transparent; }
+
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-main { background: var(--accent); color: var(--white); padding: 16px 40px; font-size: 16px; font-weight: 700; text-decoration: none; display: inline-block; transition: all 0.2s; border: none; cursor: pointer; }
+  .btn-main:hover { background: #c82e10; transform: translateY(-2px); }
+  .btn-sub { background: transparent; color: var(--white); padding: 16px 40px; font-size: 16px; font-weight: 700; text-decoration: none; display: inline-block; transition: all 0.2s; border: 1px solid var(--border); }
+  .btn-sub:hover { border-color: rgba(255,255,255,0.3); }
+
+  /* HONEST BAND */
+  .honest-band { background: var(--gray); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 40px 5vw; }
+  .honest-inner { max-width: 900px; }
+  .honest-title { font-size: 11px; font-family: 'Space Mono', monospace; letter-spacing: 0.3em; color: rgba(244,240,232,0.35); margin-bottom: 20px; }
+  .honest-text { font-size: clamp(18px, 2.5vw, 26px); font-weight: 700; line-height: 1.7; }
+  .honest-text .yes { color: var(--green); }
+  .honest-text .no { color: rgba(244,240,232,0.3); text-decoration: line-through; }
+  .honest-text .accent { color: var(--yellow); }
+
+  /* MARKET */
+  .market { padding: 100px 5vw; background: var(--black); }
+  .sec-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.35em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  .sec-title { font-size: clamp(32px, 5vw, 60px); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 56px; }
+
+  .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+  .market-card { background: var(--gray); padding: 40px 36px; border-top: 3px solid transparent; transition: all 0.25s; }
+  .market-card.en { border-color: var(--accent); }
+  .market-card.asia { border-color: var(--accent2); }
+  .market-card:hover { background: var(--mid); }
+  .market-card-flag { font-size: 13px; font-family: 'Space Mono', monospace; letter-spacing: 0.15em; color: rgba(244,240,232,0.4); margin-bottom: 16px; }
+  .market-card-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .market-card-text { font-size: 13px; line-height: 1.9; color: rgba(244,240,232,0.55); font-weight: 300; }
+
+  .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; margin-top: 3px; }
+  .stat { background: var(--gray); padding: 32px 24px; text-align: center; }
+  .stat-num { font-size: 48px; font-weight: 900; line-height: 1; color: var(--yellow); letter-spacing: -0.02em; }
+  .stat-unit { font-size: 20px; color: var(--accent); font-weight: 900; }
+  .stat-desc { font-size: 11px; color: rgba(244,240,232,0.4); margin-top: 8px; line-height: 1.5; font-weight: 300; }
+
+  /* TARGET */
+  .target { padding: 100px 5vw; background: var(--gray); }
+  .target-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+  .target-card { background: var(--black); padding: 48px 40px; transition: all 0.25s; }
+  .target-card:hover { background: #141414; transform: translateY(-4px); }
+  .target-type { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.3em; margin-bottom: 16px; }
+  .target-card.yt .target-type { color: var(--accent); }
+  .target-card.biz .target-type { color: var(--accent2); }
+  .target-card-title { font-size: 28px; font-weight: 900; margin-bottom: 16px; line-height: 1.2; letter-spacing: -0.02em; }
+  .target-card-text { font-size: 14px; line-height: 1.9; color: rgba(244,240,232,0.6); font-weight: 300; }
+
+  /* TRIAL */
+  .trial-card {
+    background: var(--gray);
+    border: 2px solid var(--yellow);
+    padding: 40px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 3px;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+  }
+  .trial-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 100% 50%, rgba(245,200,0,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .trial-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--yellow);
+    margin-bottom: 12px;
+  }
+  .trial-title {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .trial-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(244,240,232,0.55);
+    font-weight: 300;
+  }
+  .trial-right { text-align: right; flex-shrink: 0; }
+  .trial-price-old {
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(244,240,232,0.3);
+    text-decoration: line-through;
+    margin-bottom: 4px;
+  }
+  .trial-price {
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--yellow);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+  }
+  .trial-per {
+    font-size: 12px;
+    color: rgba(244,240,232,0.45);
+    font-weight: 300;
+    margin-bottom: 20px;
+  }
+  .trial-btn {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--black);
+    padding: 14px 32px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .trial-btn:hover { background: var(--white); transform: translate(-2px,-2px); box-shadow: 4px 4px 0 rgba(0,0,0,0.2); }
+
+  /* PLAN */
+  .plan { padding: 100px 5vw; background: var(--black); }
+  .plan-note-top { font-size: 13px; color: rgba(244,240,232,0.45); font-weight: 300; margin-top: -40px; margin-bottom: 52px; line-height: 1.8; }
+  .plan-note-top strong { color: rgba(244,240,232,0.7); font-weight: 700; }
+
+  .plan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-bottom: 3px; }
+  .plan-card { background: var(--gray); padding: 44px 36px; transition: all 0.25s; position: relative; }
+  .plan-card.featured { background: var(--accent); }
+  .plan-card:not(.featured):hover { background: var(--mid); transform: translateY(-3px); }
+  .plan-pop { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; background: var(--yellow); color: var(--black); padding: 3px 10px; display: inline-block; margin-bottom: 18px; font-weight: 700; }
+  .plan-name { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 12px; color: rgba(244,240,232,0.5); }
+  .plan-card.featured .plan-name { color: rgba(244,240,232,0.8); }
+  .plan-price { font-size: 56px; font-weight: 900; line-height: 1; letter-spacing: -0.03em; margin-bottom: 4px; }
+  .plan-card:not(.featured) .plan-price { color: var(--yellow); }
+  .plan-per { font-size: 12px; color: rgba(244,240,232,0.4); margin-bottom: 28px; font-weight: 300; }
+  .plan-card.featured .plan-per { color: rgba(244,240,232,0.7); }
+  .plan-hr { height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 24px; }
+  .plan-card.featured .plan-hr { background: rgba(255,255,255,0.25); }
+  .plan-items { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+  .plan-items li { font-size: 13px; display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; color: rgba(244,240,232,0.7); }
+  .plan-items li::before { content: '✓'; flex-shrink: 0; font-family: 'Space Mono', monospace; }
+  .plan-card:not(.featured) .plan-items li::before { color: var(--green); }
+  .plan-card.featured .plan-items li { color: rgba(244,240,232,0.9); }
+  .plan-card.featured .plan-items li::before { color: var(--yellow); }
+  .plan-btn { display: block; text-align: center; padding: 14px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; letter-spacing: 0.05em; }
+  .plan-card:not(.featured) .plan-btn { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--white); }
+  .plan-card:not(.featured) .plan-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .plan-card.featured .plan-btn { background: var(--yellow); color: var(--black); }
+  .plan-card.featured .plan-btn:hover { background: var(--white); }
+
+  /* ADDON */
+  .addon { background: var(--gray); border: 1px solid rgba(245,200,0,0.15); padding: 28px 36px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .addon-left { display: flex; align-items: center; gap: 16px; }
+  .addon-tag { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; background: rgba(245,200,0,0.1); color: var(--yellow); padding: 4px 10px; border: 1px solid rgba(245,200,0,0.2); flex-shrink: 0; }
+  .addon-info-title { font-size: 15px; font-weight: 700; }
+  .addon-info-sub { font-size: 12px; color: rgba(244,240,232,0.45); margin-top: 3px; font-weight: 300; }
+  .addon-price { font-size: 32px; font-weight: 900; color: var(--yellow); white-space: nowrap; letter-spacing: -0.02em; }
+  .addon-price span { font-size: 13px; color: rgba(244,240,232,0.4); font-weight: 300; margin-left: 4px; }
+
+  /* FLOW */
+  .flow { padding: 100px 5vw; background: var(--gray); }
+  .flow-grid { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 56px; }
+  .flow-step { padding: 36px 24px; border-right: 1px solid var(--border); }
+  .flow-step:last-child { border-right: none; }
+  .flow-n { font-size: 64px; font-weight: 900; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.1); line-height: 1; margin-bottom: 12px; letter-spacing: -0.03em; }
+  .flow-bar { width: 24px; height: 3px; background: var(--accent); margin-bottom: 16px; }
+  .flow-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .flow-text { font-size: 13px; line-height: 1.8; color: rgba(244,240,232,0.5); font-weight: 300; }
+
+  /* TERMS */
+  .terms { padding: 100px 5vw; background: var(--black); border-top: 1px solid var(--border); }
+  .terms-intro { font-size: 13px; line-height: 1.9; color: rgba(244,240,232,0.45); font-weight: 300; margin-top: -44px; margin-bottom: 52px; max-width: 680px; }
+  .terms-list { display: flex; flex-direction: column; gap: 2px; max-width: 900px; }
+  .terms-item { background: var(--gray); padding: 32px 40px; display: flex; gap: 32px; align-items: flex-start; transition: background 0.2s; }
+  .terms-item:hover { background: var(--mid); }
+  .terms-num { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--accent); flex-shrink: 0; padding-top: 2px; }
+  .terms-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .terms-text { font-size: 13px; line-height: 1.9; color: rgba(244,240,232,0.55); font-weight: 300; }
+
+  /* FAQ */
+  .faq { padding: 100px 5vw; background: var(--black); }
+  .faq-list { margin-top: 56px; max-width: 760px; display: flex; flex-direction: column; gap: 2px; }
+  .faq-item { background: var(--gray); }
+  .faq-q { padding: 22px 28px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; user-select: none; transition: color 0.2s; }
+  .faq-q:hover { color: var(--accent); }
+  .faq-icon { color: var(--accent); font-weight: 300; font-size: 22px; flex-shrink: 0; transition: transform 0.2s; line-height: 1; }
+  .faq-a { display: none; padding: 0 28px 22px; font-size: 13px; line-height: 1.9; color: rgba(244,240,232,0.55); font-weight: 300; border-top: 1px solid var(--border); padding-top: 18px; }
+  .faq-item.open .faq-a { display: block; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+  /* CTA */
+  .cta { padding: 140px 5vw; background: var(--accent); text-align: center; position: relative; overflow: hidden; }
+  .cta::before { content: '字幕屋'; position: absolute; font-size: clamp(120px, 25vw, 360px); font-weight: 900; color: rgba(0,0,0,0.08); top: 50%; left: 50%; transform: translate(-50%,-50%); white-space: nowrap; pointer-events: none; letter-spacing: -0.03em; }
+  .cta-title { font-size: clamp(40px, 8vw, 100px); font-weight: 900; line-height: 1; color: var(--white); position: relative; z-index: 1; margin-bottom: 20px; letter-spacing: -0.03em; }
+  .cta-sub { font-size: 16px; color: rgba(244,240,232,0.8); font-weight: 300; margin-bottom: 44px; position: relative; z-index: 1; }
+  .btn-cta { background: var(--white); color: var(--black); padding: 20px 56px; font-size: 16px; font-weight: 700; text-decoration: none; display: inline-block; transition: all 0.2s; position: relative; z-index: 1; }
+  .btn-cta:hover { background: var(--black); color: var(--white); transform: translate(-3px,-3px); box-shadow: 6px 6px 0 rgba(0,0,0,0.2); }
+
+  /* FOOTER */
+  footer { background: var(--black); border-top: 1px solid var(--border); padding: 32px 5vw; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 11px; font-family: 'Space Mono', monospace; color: rgba(255,255,255,0.25); }
+  .footer-logo { font-size: 18px; font-weight: 900; color: var(--white); letter-spacing: -0.01em; font-family: 'Noto Sans JP', sans-serif; }
+  .footer-logo span { color: var(--accent); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: rgba(255,255,255,0.25); text-decoration: none; transition: color 0.2s; font-size: 11px; }
+  .footer-links a:hover { color: var(--white); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .market-grid, .target-grid, .plan-grid, .flow-grid, .stats-strip { grid-template-columns: 1fr; }
+    .flow-step { border-right: none; border-bottom: 1px solid var(--border); }
+    .flow-step:last-child { border-bottom: none; }
+    .addon { flex-direction: column; align-items: flex-start; }
+  }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-kicker { animation: fadeUp 0.4s ease 0.1s both; }
+  .hero-title   { animation: fadeUp 0.4s ease 0.2s both; }
+  .hero-desc    { animation: fadeUp 0.4s ease 0.3s both; }
+  .hero-badges  { animation: fadeUp 0.4s ease 0.4s both; }
+  .hero-cta     { animation: fadeUp 0.4s ease 0.5s both; }
+</style>
+</head>
+<body>
+
+<div class="ticker">
+  <span class="ticker-inner">
+    🎬 YouTube字幕翻訳 &nbsp;▸&nbsp; .srtファイル納品 &nbsp;▸&nbsp; 英語・中国語・韓国語・タイ語・インドネシア語 &nbsp;▸&nbsp; 早い・安い・そこそこ &nbsp;▸&nbsp; 1本から依頼OK &nbsp;▸&nbsp; 過去動画まとめて対応 &nbsp;▸&nbsp;&nbsp;
+    🎬 YouTube字幕翻訳 &nbsp;▸&nbsp; .srtファイル納品 &nbsp;▸&nbsp; 英語・中国語・韓国語・タイ語・インドネシア語 &nbsp;▸&nbsp; 早い・安い・そこそこ &nbsp;▸&nbsp; 1本から依頼OK &nbsp;▸&nbsp; 過去動画まとめて対応 &nbsp;▸&nbsp;&nbsp;
+  </span>
+</div>
+
+<nav>
+  <div class="nav-logo">字幕<span>屋</span>.com</div>
+  <a href="#contact" class="nav-cta">無料相談する</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-kicker">YouTube動画の多言語字幕サービス</div>
+  <h1 class="hero-title">
+    字幕、つけます。<br>
+    <span class="em">早く、安く、</span>そこそこ。
+    <span class="small">完璧じゃなくていい。まず世界に届けることから始めよう。</span>
+  </h1>
+  <p class="hero-desc">
+    動画を送ってもらえれば、<strong>英語・中国語・韓国語など最大3言語の字幕ファイル（.srt）を同時に納品</strong>します。あとはYouTubeにアップするだけ。難しいことは何もない。
+  </p>
+  <div class="hero-badges">
+    <div class="badge badge-speed">⚡ 最短3営業日納品</div>
+    <div class="badge badge-price">💴 単発相談OK</div>
+    <div class="badge badge-honest">※完璧な翻訳は保証しません</div>
+  </div>
+  <div class="hero-cta">
+    <a href="#plan" class="btn-main">料金を見る</a>
+    <a href="#contact" class="btn-sub">まず相談する</a>
+  </div>
+</section>
+
+<div class="honest-band">
+  <div class="honest-inner">
+    <div class="honest-title">// HONEST POSITIONING</div>
+    <p class="honest-text">
+      <span class="yes">✓ 早い</span>　
+      <span class="yes">✓ 安い</span>　
+      <span class="yes">✓ とりあえず字幕がつく</span>　
+      <span class="no">✗ 完璧な文学的翻訳</span>　
+      <span class="no">✗ 高級感</span>　——
+      <span class="accent">それでいい人向けのサービスです。</span>
+    </p>
+  </div>
+</div>
+
+<section class="market">
+  <div class="sec-label">Why Now</div>
+  <h2 class="sec-title">なぜ今、<br>字幕が必要なのか</h2>
+  <div class="market-grid">
+    <div class="market-card en">
+      <div class="market-card-flag">US / UK</div>
+      <div class="market-card-title">英語圏（アメリカ・イギリス）</div>
+      <p class="market-card-text">世界最大のYouTube市場。英語字幕があるだけで検索アルゴリズムの対象が一気に広がる。バズの入り口として最も有効。</p>
+    </div>
+    <div class="market-card asia">
+      <div class="market-card-flag">CN / KR / TH / ID</div>
+      <div class="market-card-title">アジア（中国・韓国・東南アジア）</div>
+      <p class="market-card-text">日本コンテンツへの需要が特に高いエリア。字幕さえあれば既存ファンが拡散してくれる。伸びしろが一番大きい市場。</p>
+    </div>
+  </div>
+  <div class="stats-strip">
+    <div class="stat">
+      <div class="stat-num">72<span class="stat-unit">%</span></div>
+      <div class="stat-desc">YouTubeの非英語圏視聴者比率</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4<span class="stat-unit">億</span></div>
+      <div class="stat-desc">東南アジアのYouTubeアクティブユーザー</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">7<span class="stat-unit">億</span></div>
+      <div class="stat-desc">英語圏YouTube月間視聴者</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3<span class="stat-unit">倍</span></div>
+      <div class="stat-desc">字幕追加後の視聴時間平均増加</div>
+    </div>
+  </div>
+</section>
+
+<section class="target">
+  <div class="sec-label">For You</div>
+  <h2 class="sec-title">こんな人に<br>ちょうどいい</h2>
+  <div class="target-grid">
+    <div class="target-card yt">
+      <div class="target-type">FOR YOUTUBER / CREATOR</div>
+      <h3 class="target-card-title">とにかくまず<br>海外に届けたい人</h3>
+      <p class="target-card-text">完璧な翻訳じゃなくていい。字幕があるかないかで、再生数は変わる。まず試したい、コストを抑えたい、そういう人のためのサービスです。</p>
+    </div>
+    <div class="target-card biz">
+      <div class="target-type">FOR BUSINESS / CORPORATE</div>
+      <h3 class="target-card-title">既存の動画を<br>海外でも使いたい企業</h3>
+      <p class="target-card-text">製品紹介・採用・マニュアル動画——すでにある動画に字幕をつけるだけで、海外向け資料になる。新しく作る予算はないけど、多言語化はしたい企業向け。</p>
+    </div>
+  </div>
+</section>
+
+<section class="plan" id="plan">
+  <div class="sec-label">Pricing</div>
+  <h2 class="sec-title">料金プラン</h2>
+  <p class="plan-note-top">全プラン、<strong>英語・中国語・韓国語の3言語字幕ファイル（.srt）を同時納品</strong>します。タイトル・概要欄の翻訳は別途オプションです。</p>
+
+  <!-- お試しプラン -->
+  <div class="trial-card">
+    <div class="trial-left">
+      <div class="trial-tag">🎉 期間限定 サービス開始記念</div>
+      <div class="trial-title">お試し3本パック</div>
+      <div class="trial-desc">まず試してみたい方へ。3本まとめて依頼で特別価格。<br>通常 ¥15,000 のところ</div>
+    </div>
+    <div class="trial-right">
+      <div class="trial-price-old">¥15,000</div>
+      <div class="trial-price">¥12,000</div>
+      <div class="trial-per">3本セット / 3言語同時納品</div>
+      <a href="#contact" class="trial-btn">このプランで申し込む</a>
+    </div>
+  </div>
+
+  <div class="plan-grid">
+    <div class="plan-card">
+      <div class="plan-name">単発</div>
+      <div class="plan-price">¥5,000</div>
+      <div class="plan-per">1本 / 30分以内（30分超は相談）</div>
+      <div class="plan-hr"></div>
+      <ul class="plan-items">
+        <li>英語・中国語・韓国語 3言語同時納品</li>
+        <li>字幕ファイル（.srt）納品</li>
+        <li>修正：明らかなズレのみ対応</li>
+      </ul>
+      <a href="#contact" class="plan-btn">問い合わせる</a>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-pop">MOST POPULAR</div>
+      <div class="plan-name">月額プラン</div>
+      <div class="plan-price">¥40,000</div>
+      <div class="plan-per">/ 月（10本まで）</div>
+      <div class="plan-hr"></div>
+      <ul class="plan-items">
+        <li>月10本まで動画翻訳</li>
+        <li>英語・中国語・韓国語 3言語同時納品</li>
+        <li>字幕ファイル（.srt）納品</li>
+        <li>修正：明らかなズレのみ対応</li>
+      </ul>
+      <a href="#contact" class="plan-btn">問い合わせる</a>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">まとめ依頼</div>
+      <div class="plan-price">応相談</div>
+      <div class="plan-per">10本以上・過去動画一括向け</div>
+      <div class="plan-hr"></div>
+      <ul class="plan-items">
+        <li>10本以上で割引あり</li>
+        <li>英語・中国語・韓国語 3言語同時納品</li>
+        <li>字幕ファイル（.srt）納品</li>
+        <li>修正：明らかなズレのみ対応</li>
+      </ul>
+      <a href="#contact" class="plan-btn">相談する</a>
+    </div>
+  </div>
+  <div class="addon">
+    <div class="addon-left">
+      <div class="addon-tag">ADD-ON</div>
+      <div>
+        <div class="addon-info-title">タイトル・概要欄の翻訳</div>
+        <div class="addon-info-sub">SEOを意識した現地語タイトル・概要欄・ハッシュタグをセットで翻訳</div>
+      </div>
+    </div>
+    <div class="addon-price">¥3,000<span>/ 本</span></div>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="sec-label">How It Works</div>
+  <h2 class="sec-title">依頼から納品まで</h2>
+  <div class="flow-grid">
+    <div class="flow-step">
+      <div class="flow-n">01</div>
+      <div class="flow-bar"></div>
+      <div class="flow-title">問い合わせ</div>
+      <p class="flow-text">動画のURL・本数・希望言語を教えてください。メールかSNSのDMでOK。</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-n">02</div>
+      <div class="flow-bar"></div>
+      <div class="flow-title">見積もり</div>
+      <p class="flow-text">最短翌日にお見積もりをお送りします。1本からの単発依頼もOK。</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-n">03</div>
+      <div class="flow-bar"></div>
+      <div class="flow-title">翻訳・制作</div>
+      <p class="flow-text">動画の内容とターゲット市場に合わせて翻訳。3〜5営業日が目安。</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-n">04</div>
+      <div class="flow-bar"></div>
+      <div class="flow-title">納品</div>
+      <p class="flow-text">ギガファイル便で.srtファイルを納品。アップロード方法がわからなければサポートします。</p>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="sec-label">FAQ</div>
+  <h2 class="sec-title">よくある質問</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">字幕をつければ再生数は伸びますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">字幕の追加による再生数・チャンネル登録者数・収益の増加は一切保証しません。字幕は海外視聴者へのリーチを広げる手段のひとつですが、効果は動画の内容・ジャンル・投稿頻度など多くの要因によります。「字幕をつけたのに伸びなかった」という理由での返金には対応できません。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">音声が聞き取りにくい動画でも大丈夫ですか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">音声が不明瞭・ノイズが多い・早口・方言・BGMが大きい・話者が多い場合、翻訳精度が著しく下がる可能性があります。聞き取れない部分は省略または推測で補完します。この場合でも返金・修正対応はできません。不安な場合は依頼前にご相談ください。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">修正はできますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">原則として修正対応はしていません。ただし「全然違う言語が入っている」「明らかに大きくズレている」など明確な誤りがある場合のみ無償で対応します。細かいニュアンスの調整や言い回しの好みによる修正はお受けできません。ご了承のうえご依頼ください。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">1本だけの単発依頼はできますか？料金は？<span class="faq-icon">+</span></div>
+      <div class="faq-a">できます。単発料金は動画の長さで変わります。<br>・30分以内：¥5,000（3言語同時）<br>・30分超：別途お見積もり<br>まず1本試してみたい方も大歓迎です。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">納品物は何ですか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">納品物は字幕ファイル（.srt形式）のみです。英語・中国語・韓国語の3言語分をギガファイル便でお渡しします。吹き替え音声・動画ファイル自体の納品は含まれません。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">キャンセルはできますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">作業開始前であれば全額返金します。ただし作業開始後のキャンセルは返金できません。依頼前に内容・本数をしっかり確認してからご依頼ください。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">.srtファイルはどうやってYouTubeにアップしますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">YouTubeの動画管理画面から「字幕」タブを選択してアップロードするだけです。手順がわからない場合はサポートします。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">過去動画が大量にあります。対応できますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">対応できます。10本以上でまとめ割引があります。本数を教えていただければ専用の見積もりを出します。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 利用規約 -->
+<section class="terms">
+  <div class="sec-label">Terms</div>
+  <h2 class="sec-title">ご利用規約</h2>
+  <p class="terms-intro">本サービスをご利用いただく前に必ずお読みください。依頼をもって以下の規約に同意いただいたものとみなします。</p>
+
+  <div class="terms-list">
+
+    <div class="terms-item">
+      <div class="terms-num">01</div>
+      <div class="terms-body">
+        <div class="terms-title">依頼できる動画について</div>
+        <p class="terms-text">依頼者が著作権その他の権利を有する動画に限り受け付けます。第三者が権利を持つ動画を無断で依頼することは禁止します。無断依頼が発覚した場合は即時キャンセルとし、返金はいたしません。権利侵害に伴う一切の責任は依頼者が負うものとします。</p>
+      </div>
+    </div>
+
+    <div class="terms-item">
+      <div class="terms-num">02</div>
+      <div class="terms-body">
+        <div class="terms-title">受付を拒否できるコンテンツ</div>
+        <p class="terms-text">以下に該当するコンテンツの依頼はお断りします。理由の開示義務はありません。①違法または違法を助長する内容、②差別・ヘイトスピーチを含む内容、③過度な暴力・性的表現を含む内容、④反社会的勢力に関連する内容、⑤その他当サービスが不適切と判断した内容。</p>
+      </div>
+    </div>
+
+    <div class="terms-item">
+      <div class="terms-num">03</div>
+      <div class="terms-body">
+        <div class="terms-title">翻訳品質・免責事項</div>
+        <p class="terms-text">本サービスは「速度とコストを優先した翻訳」を提供します。完璧な翻訳精度・文学的品質は保証しません。また、依頼動画の音声が不明瞭・ノイズが多い・早口・方言・BGMが大きい・話者が多いなどの場合、翻訳精度が著しく低下することがあります。これらに起因する品質低下は返金・修正の対象外とします。翻訳内容のニュアンスの差異、誤訳、文化的齟齬などによって生じた損害（視聴者からのクレーム、収益損失、信用毀損等を含む）について、当サービスは一切の責任を負いません。なお、字幕の追加による再生数・登録者数・収益等の向上は一切保証しません。</p>
+      </div>
+    </div>
+
+    <div class="terms-item">
+      <div class="terms-num">04</div>
+      <div class="terms-body">
+        <div class="terms-title">著作権の帰属</div>
+        <p class="terms-text">納品した字幕ファイル（.srt）の著作権は依頼者に帰属します。ただし当サービスが作成したデータを第三者への再販・転売目的で使用することは禁止します。</p>
+      </div>
+    </div>
+
+    <div class="terms-item">
+      <div class="terms-num">05</div>
+      <div class="terms-body">
+        <div class="terms-title">キャンセル・返金</div>
+        <p class="terms-text">作業開始前の連絡による依頼キャンセルは全額返金します。作業開始後のキャンセルは理由を問わず返金しません。「作業開始」とは翻訳着手をもって定義します。納品後は、明らかな誤り（誤言語・文字化け等）が確認された場合のみ無償修正対応します。それ以外の修正・返金要求にはお応えできません。</p>
+      </div>
+    </div>
+
+    <div class="terms-item">
+      <div class="terms-num">06</div>
+      <div class="terms-body">
+        <div class="terms-title">納品遅延について</div>
+        <p class="terms-text">納期は目安であり、確約ではありません。動画の内容・長さ・言語の難易度によって前後する場合があります。納品遅延による損害（機会損失・収益損失等）について、当サービスは責任を負いません。</p>
+      </div>
+    </div>
+
+    <div class="terms-item">
+      <div class="terms-num">07</div>
+      <div class="terms-body">
+        <div class="terms-title">サービス内容の変更・停止</div>
+        <p class="terms-text">当サービスは予告なく料金・内容・提供条件を変更、またはサービスを停止する場合があります。変更・停止による損害について責任を負いません。ただし既に入金済みの依頼については完遂するか、全額返金します。</p>
+      </div>
+    </div>
+
+    <div class="terms-item">
+      <div class="terms-num">08</div>
+      <div class="terms-body">
+        <div class="terms-title">反社会的勢力の排除</div>
+        <p class="terms-text">反社会的勢力（暴力団、暴力団関係者、その他これに準ずる者）による利用を固くお断りします。該当が判明した場合は即時依頼を解除し、返金はいたしません。</p>
+      </div>
+    </div>
+
+    <div class="terms-item">
+      <div class="terms-num">09</div>
+      <div class="terms-body">
+        <div class="terms-title">準拠法・合意管轄</div>
+        <p class="terms-text">本規約は日本法に準拠します。本サービスに関する紛争については、当事者の住所地を管轄する裁判所を合意管轄裁判所とします。</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <h2 class="cta-title">まず1本、<br>試してみよう。</h2>
+  <p class="cta-sub">完璧じゃなくていい。字幕があるかないかで、世界は変わる。</p>
+  <a href="mailto:info.jimakuya@gmail.com" class="btn-cta">無料相談・お見積もり →</a>
+</section>
+
+<footer>
+  <div class="footer-logo">字幕<span>屋</span>.com</div>
+  <div class="footer-links">
+    <a href="tokusho.html">特定商取引法に基づく表記</a>
+  </div>
+  <div>© 2026 字幕屋.com — All Rights Reserved</div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

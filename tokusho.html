@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>特定商取引法に基づく表記 — 字幕屋.com</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0f0f0f;
+    --white: #f4f0e8;
+    --accent: #e8381a;
+    --accent2: #1a8ce8;
+    --yellow: #f5c800;
+    --gray: #181818;
+    --border: rgba(255,255,255,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Noto Sans JP', sans-serif; overflow-x: hidden; min-height: 100vh; }
+
+  nav { padding: 18px 5vw; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(15,15,15,0.95); backdrop-filter: blur(12px); z-index: 50; }
+  .nav-logo { font-size: 22px; font-weight: 900; letter-spacing: -0.02em; text-decoration: none; color: var(--white); }
+  .nav-logo span { color: var(--accent); }
+  .back { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+  .back:hover { color: var(--white); }
+
+  .page-head { padding: 72px 5vw 56px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  .page-head::before { content: 'LAW'; position: absolute; right: 4vw; top: 50%; transform: translateY(-50%); font-size: clamp(100px, 18vw, 260px); font-weight: 900; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.04); letter-spacing: -0.03em; pointer-events: none; }
+  .page-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.35em; color: var(--accent); margin-bottom: 16px; }
+  .page-title { font-size: clamp(32px, 6vw, 72px); font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; }
+
+  .notice { background: rgba(245,200,0,0.05); border-top: 1px solid rgba(245,200,0,0.15); border-bottom: 1px solid rgba(245,200,0,0.15); padding: 16px 5vw; display: flex; align-items: center; gap: 14px; }
+  .notice-tag { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; color: var(--yellow); border: 1px solid rgba(245,200,0,0.3); padding: 3px 10px; flex-shrink: 0; }
+  .notice-text { font-size: 12px; color: rgba(245,200,0,0.65); font-weight: 300; line-height: 1.6; }
+
+  main { padding: 72px 5vw 100px; max-width: 1000px; }
+  table { width: 100%; border-collapse: collapse; }
+  tr { border-bottom: 1px solid var(--border); }
+  tr:first-child { border-top: 1px solid var(--border); }
+  tr:hover { background: rgba(255,255,255,0.015); }
+  th { width: 200px; padding: 26px 20px 26px 0; vertical-align: top; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--accent); font-weight: 400; text-transform: uppercase; white-space: nowrap; }
+  td { padding: 26px 0 26px 36px; font-size: 14px; line-height: 1.9; color: rgba(244,240,232,0.78); font-weight: 300; border-left: 1px solid var(--border); vertical-align: top; }
+  td strong { color: var(--white); font-weight: 700; }
+  td .sub { font-size: 12px; color: rgba(244,240,232,0.35); margin-top: 6px; line-height: 1.7; }
+  td .chip { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,56,26,0.07); border: 1px solid rgba(232,56,26,0.2); padding: 5px 14px; font-size: 12px; color: rgba(232,100,60,0.85); margin-top: 8px; font-family: 'Space Mono', monospace; letter-spacing: 0.05em; }
+  td .chip::before { content: '▸'; color: var(--accent); }
+
+  .note { background: var(--gray); border-left: 3px solid var(--accent2); padding: 24px 28px; margin-top: 56px; }
+  .note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; color: var(--accent2); margin-bottom: 12px; }
+  .note-text { font-size: 13px; line-height: 1.9; color: rgba(244,240,232,0.55); font-weight: 300; }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 5vw; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 11px; font-family: 'Space Mono', monospace; color: rgba(255,255,255,0.22); }
+  .footer-logo { font-size: 17px; font-weight: 900; color: var(--white); font-family: 'Noto Sans JP', sans-serif; }
+  .footer-logo span { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    th { width: 90px; font-size: 9px; padding-right: 12px; }
+    td { padding-left: 16px; font-size: 13px; }
+    .page-head::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">字幕<span>屋</span>.com</a>
+  <a href="index.html" class="back">← トップに戻る</a>
+</nav>
+
+<div class="page-head">
+  <div class="page-label">Legal Notice</div>
+  <h1 class="page-title">特定商取引法に<br>基づく表記</h1>
+</div>
+
+<div class="notice">
+  <div class="notice-tag">NOTICE</div>
+  <p class="notice-text">特定商取引法第11条に基づき、以下の事項を表記します。サービスご利用前に必ずご確認ください。</p>
+</div>
+
+<main>
+  <table>
+    <tr>
+      <th>販売事業者</th>
+      <td>字幕屋</td>
+    </tr>
+    <tr>
+      <th>運営責任者</th>
+      <td>片平 裕介</td>
+    </tr>
+    <tr>
+      <th>所在地</th>
+      <td>
+        <div class="chip">請求があった場合に遅滞なく開示します</div>
+        <div class="sub">個人情報保護の観点から、請求ベースでの開示としています</div>
+      </td>
+    </tr>
+    <tr>
+      <th>電話番号</th>
+      <td>
+        <div class="chip">請求があった場合に遅滞なく開示します</div>
+      </td>
+    </tr>
+    <tr>
+      <th>メール</th>
+      <td>info.jimakuya@gmail.com</td>
+    </tr>
+    <tr>
+      <th>サービス内容</th>
+      <td>YouTube等の動画に対する多言語字幕ファイル（.srt形式）の翻訳・納品サービス</td>
+    </tr>
+    <tr>
+      <th>納品物</th>
+      <td>
+        字幕ファイル（.srt形式）英語・中国語・韓国語 3言語分
+        <div class="sub">ギガファイル便で納品します。動画ファイル自体・吹き替え音声は含まれません。</div>
+      </td>
+    </tr>
+    <tr>
+      <th>販売価格</th>
+      <td>
+        各プランページに記載の金額（税込）
+        <div class="sub">オプション料金が発生する場合は、見積もり時に明示します</div>
+      </td>
+    </tr>
+    <tr>
+      <th>支払方法</th>
+      <td>銀行振込</td>
+    </tr>
+    <tr>
+      <th>支払時期</th>
+      <td>
+        サービス開始前の前払い
+        <div class="sub">請求書発行後、7日以内にお振込みください</div>
+      </td>
+    </tr>
+    <tr>
+      <th>納品時期</th>
+      <td>
+        入金確認後、3〜5営業日以内
+        <div class="sub">動画の長さ・本数により変動する場合があります</div>
+      </td>
+    </tr>
+    <tr>
+      <th>キャンセル・返金</th>
+      <td>
+        <strong>作業開始前：全額返金対応</strong><br>
+        <strong>作業開始後：返金不可</strong>
+        <div class="sub">依頼前に内容・本数を必ずご確認ください。納品後の修正は原則対応しません。明らかな大幅ズレ（誤言語・文字化け等）の場合のみ無償対応します。</div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="note">
+    <div class="note-label">// お問い合わせ</div>
+    <p class="note-text">住所・電話番号の開示を希望される場合は、上記メールアドレスまでご連絡ください。遅滞なく対応いたします。</p>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-logo">字幕<span>屋</span>.com</div>
+  <div>© 2026 字幕屋.com — All Rights Reserved</div>
+</footer>
+
+</body>
+</html>
